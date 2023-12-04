@@ -20,23 +20,6 @@ type card struct {
 	p2      int
 }
 
-func (c *card) calcP2Points(cards []card) int {
-	// exit recursion
-	if c.rec == true {
-		return c.p2
-	}
-
-	ret := 0
-	for i := c.id; i < len(c.matches)+c.id; i++ {
-		ret += cards[i].calcP2Points(cards)
-	}
-
-	c.rec = true
-	c.p2 = ret + len(c.matches)
-
-	return c.p2
-}
-
 func main() {
 	// Read file
 	file, err := os.Open("./input.txt")
@@ -112,6 +95,24 @@ func main() {
 	fmt.Printf("\n\n\nSUM Points: %+v\n\n\n", sumPoints)
 
 	// Part 2
+	func (c *card) calcP2Points(cards []card) int {
+		// exit recursion
+		if c.rec == true {
+			return c.p2
+		}
+	
+		ret := 0
+		for i := c.id; i < len(c.matches)+c.id; i++ {
+			ret += cards[i].calcP2Points(cards)
+		}
+	
+		c.rec = true
+		c.p2 = ret + len(c.matches)
+	
+		return c.p2
+	}
+
+	
 	p2Points := 0
 	for _, c := range cards {
 		p2Points += c.calcP2Points(cards)
